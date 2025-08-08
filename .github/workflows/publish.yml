@@ -38,11 +38,10 @@ jobs:
 
       - name: Build project
         run: |
-          # Clear any problematic Gradle properties
-          unset GRADLE_USER_HOME
+          # Build the project with CI-optimized settings
           ./gradlew build -x test --no-daemon --stacktrace --info
         env:
-          # Force Gradle to use system Java
+          # Override gradle.properties settings for CI
           GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=false -Dorg.gradle.java.installations.auto-detect=false"
 
       - name: Trigger JitPack build
