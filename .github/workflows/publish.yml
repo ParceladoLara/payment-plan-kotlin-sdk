@@ -1,0 +1,63 @@
+name: Publish to JitPack
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for proper versioning
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Build project
+        run: ./gradlew build -x test --no-daemon --stacktrace
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=false"
+
+      - name: Trigger JitPack build
+        run: |
+          # Get the release tag
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          echo "Triggering JitPack build for tag: $TAG_NAME"
+
+          # Trigger JitPack to build this version
+          curl -s "https://jitpack.io/com/github/parceladolara/payment-plan-kotlin-sdk/$TAG_NAME"
+
+          # Wait a moment and check if build was successful
+          sleep 30
+          RESPONSE=$(curl -s "https://jitpack.io/api/builds/com.github.parceladolara/payment-plan-kotlin-sdk/$TAG_NAME")
+          echo "JitPack build response: $RESPONSE"
+
+          if echo "$RESPONSE" | grep -q '"status":"ok"'; then
+            echo "✅ JitPack build successful!"
+          else
+            echo "❌ JitPack build may have failed. Check: https://jitpack.io/#parceladolara/payment-plan-kotlin-sdk"
+            echo "Response: $RESPONSE"
+          fi
