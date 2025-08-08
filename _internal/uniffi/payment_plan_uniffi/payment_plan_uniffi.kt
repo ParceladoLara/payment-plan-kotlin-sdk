@@ -3,7 +3,7 @@
 
 @file:Suppress("NAME_SHADOWING")
 
-package uniffi.payment_plan_uniffi
+package com.parceladolara.paymentplan.payment_plan_uniffi
 
 // Common helper code.
 //
@@ -133,12 +133,12 @@ internal open class ForeignBytes : Structure() {
 /**
  * The FfiConverter interface handles converter types to and from the FFI
  *
- * All implementing objects should be public to support external types. When a type is external we
+ * All implementing objects should be internal to support external types. When a type is external we
  * need to import it's FfiConverter.
  *
  * @suppress
  */
-public interface FfiConverter<KotlinType, FfiType> {
+internal interface FfiConverter<KotlinType, FfiType> {
     // Convert an FFI type to a Kotlin type
     fun lift(value: FfiType): KotlinType
 
@@ -208,7 +208,8 @@ public interface FfiConverter<KotlinType, FfiType> {
  *
  * @suppress
  */
-public interface FfiConverterRustBuffer<KotlinType> : FfiConverter<KotlinType, RustBuffer.ByValue> {
+internal interface FfiConverterRustBuffer<KotlinType> :
+        FfiConverter<KotlinType, RustBuffer.ByValue> {
     override fun lift(value: RustBuffer.ByValue) = liftFromRustBuffer(value)
     override fun lower(value: KotlinType) = lowerIntoRustBuffer(value)
 }
@@ -805,7 +806,7 @@ internal interface UniffiForeignFutureCompleteVoid : com.sun.jna.Callback {
 }
 
 // A JNA Library to expose the extern-C FFI definitions.
-// This is an implementation detail which will be called internally by the public API.
+// This is an implementation detail which will be called internally by the internal API.
 
 internal interface UniffiLib : Library {
     companion object {
@@ -1105,7 +1106,7 @@ private fun uniffiCheckApiChecksums(lib: UniffiLib) {
 
 // Async support
 
-// Public interface members begin here.
+// internal interface members begin here.
 
 // Interface implemented by anything that can contain an object reference.
 //
@@ -1145,7 +1146,7 @@ inline fun <T : Disposable?, R> T.use(block: (T) -> R) =
 object NoPointer
 
 /** @suppress */
-public object FfiConverterUShort : FfiConverter<UShort, Short> {
+internal object FfiConverterUShort : FfiConverter<UShort, Short> {
     override fun lift(value: Short): UShort {
         return value.toUShort()
     }
@@ -1166,7 +1167,7 @@ public object FfiConverterUShort : FfiConverter<UShort, Short> {
 }
 
 /** @suppress */
-public object FfiConverterUInt : FfiConverter<UInt, Int> {
+internal object FfiConverterUInt : FfiConverter<UInt, Int> {
     override fun lift(value: Int): UInt {
         return value.toUInt()
     }
@@ -1187,7 +1188,7 @@ public object FfiConverterUInt : FfiConverter<UInt, Int> {
 }
 
 /** @suppress */
-public object FfiConverterLong : FfiConverter<Long, Long> {
+internal object FfiConverterLong : FfiConverter<Long, Long> {
     override fun lift(value: Long): Long {
         return value
     }
@@ -1208,7 +1209,7 @@ public object FfiConverterLong : FfiConverter<Long, Long> {
 }
 
 /** @suppress */
-public object FfiConverterDouble : FfiConverter<Double, Double> {
+internal object FfiConverterDouble : FfiConverter<Double, Double> {
     override fun lift(value: Double): Double {
         return value
     }
@@ -1229,7 +1230,7 @@ public object FfiConverterDouble : FfiConverter<Double, Double> {
 }
 
 /** @suppress */
-public object FfiConverterBoolean : FfiConverter<Boolean, Byte> {
+internal object FfiConverterBoolean : FfiConverter<Boolean, Byte> {
     override fun lift(value: Byte): Boolean {
         return value.toInt() != 0
     }
@@ -1250,7 +1251,7 @@ public object FfiConverterBoolean : FfiConverter<Boolean, Byte> {
 }
 
 /** @suppress */
-public object FfiConverterString : FfiConverter<String, RustBuffer.ByValue> {
+internal object FfiConverterString : FfiConverter<String, RustBuffer.ByValue> {
     // Note: we don't inherit from FfiConverterRustBuffer, because we use a
     // special encoding when lowering/lifting.  We can use `RustBuffer.len` to
     // store our length and avoid writing it out to the buffer.
@@ -1307,7 +1308,7 @@ public object FfiConverterString : FfiConverter<String, RustBuffer.ByValue> {
 }
 
 /** @suppress */
-public object FfiConverterTimestamp : FfiConverterRustBuffer<java.time.Instant> {
+internal object FfiConverterTimestamp : FfiConverterRustBuffer<java.time.Instant> {
     override fun read(buf: ByteBuffer): java.time.Instant {
         val seconds = buf.getLong()
         // Type mismatch (should be u32) but we check for overflow/underflow below
@@ -1364,7 +1365,7 @@ data class DownPaymentParams(
 }
 
 /** @suppress */
-public object FfiConverterTypeDownPaymentParams : FfiConverterRustBuffer<DownPaymentParams> {
+internal object FfiConverterTypeDownPaymentParams : FfiConverterRustBuffer<DownPaymentParams> {
     override fun read(buf: ByteBuffer): DownPaymentParams {
         return DownPaymentParams(
                 FfiConverterTypeParams.read(buf),
@@ -1403,7 +1404,7 @@ data class DownPaymentResponse(
 }
 
 /** @suppress */
-public object FfiConverterTypeDownPaymentResponse : FfiConverterRustBuffer<DownPaymentResponse> {
+internal object FfiConverterTypeDownPaymentResponse : FfiConverterRustBuffer<DownPaymentResponse> {
     override fun read(buf: ByteBuffer): DownPaymentResponse {
         return DownPaymentResponse(
                 FfiConverterDouble.read(buf),
@@ -1441,7 +1442,7 @@ data class Invoice(
 }
 
 /** @suppress */
-public object FfiConverterTypeInvoice : FfiConverterRustBuffer<Invoice> {
+internal object FfiConverterTypeInvoice : FfiConverterRustBuffer<Invoice> {
     override fun read(buf: ByteBuffer): Invoice {
         return Invoice(
                 FfiConverterLong.read(buf),
@@ -1485,7 +1486,7 @@ data class Params(
 }
 
 /** @suppress */
-public object FfiConverterTypeParams : FfiConverterRustBuffer<Params> {
+internal object FfiConverterTypeParams : FfiConverterRustBuffer<Params> {
     override fun read(buf: ByteBuffer): Params {
         return Params(
                 FfiConverterDouble.read(buf),
@@ -1577,7 +1578,7 @@ data class Response(
 }
 
 /** @suppress */
-public object FfiConverterTypeResponse : FfiConverterRustBuffer<Response> {
+internal object FfiConverterTypeResponse : FfiConverterRustBuffer<Response> {
     override fun read(buf: ByteBuffer): Response {
         return Response(
                 FfiConverterUInt.read(buf),
@@ -1712,7 +1713,7 @@ sealed class Exception : kotlin.Exception() {
 }
 
 /** @suppress */
-public object FfiConverterTypeError : FfiConverterRustBuffer<Exception> {
+internal object FfiConverterTypeError : FfiConverterRustBuffer<Exception> {
     override fun read(buf: ByteBuffer): Exception {
 
         return when (buf.getInt()) {
@@ -1750,7 +1751,7 @@ public object FfiConverterTypeError : FfiConverterRustBuffer<Exception> {
 }
 
 /** @suppress */
-public object FfiConverterSequenceTimestamp : FfiConverterRustBuffer<List<java.time.Instant>> {
+internal object FfiConverterSequenceTimestamp : FfiConverterRustBuffer<List<java.time.Instant>> {
     override fun read(buf: ByteBuffer): List<java.time.Instant> {
         val len = buf.getInt()
         return List<java.time.Instant>(len) { FfiConverterTimestamp.read(buf) }
@@ -1769,7 +1770,7 @@ public object FfiConverterSequenceTimestamp : FfiConverterRustBuffer<List<java.t
 }
 
 /** @suppress */
-public object FfiConverterSequenceTypeDownPaymentResponse :
+internal object FfiConverterSequenceTypeDownPaymentResponse :
         FfiConverterRustBuffer<List<DownPaymentResponse>> {
     override fun read(buf: ByteBuffer): List<DownPaymentResponse> {
         val len = buf.getInt()
@@ -1790,7 +1791,7 @@ public object FfiConverterSequenceTypeDownPaymentResponse :
 }
 
 /** @suppress */
-public object FfiConverterSequenceTypeInvoice : FfiConverterRustBuffer<List<Invoice>> {
+internal object FfiConverterSequenceTypeInvoice : FfiConverterRustBuffer<List<Invoice>> {
     override fun read(buf: ByteBuffer): List<Invoice> {
         val len = buf.getInt()
         return List<Invoice>(len) { FfiConverterTypeInvoice.read(buf) }
@@ -1809,7 +1810,7 @@ public object FfiConverterSequenceTypeInvoice : FfiConverterRustBuffer<List<Invo
 }
 
 /** @suppress */
-public object FfiConverterSequenceTypeResponse : FfiConverterRustBuffer<List<Response>> {
+internal object FfiConverterSequenceTypeResponse : FfiConverterRustBuffer<List<Response>> {
     override fun read(buf: ByteBuffer): List<Response> {
         val len = buf.getInt()
         return List<Response>(len) { FfiConverterTypeResponse.read(buf) }
@@ -1828,7 +1829,7 @@ public object FfiConverterSequenceTypeResponse : FfiConverterRustBuffer<List<Res
 }
 
 @Throws(Exception::class)
-fun `calculateDownPaymentPlan`(`params`: DownPaymentParams): List<DownPaymentResponse> {
+internal fun `calculateDownPaymentPlan`(`params`: DownPaymentParams): List<DownPaymentResponse> {
     return FfiConverterSequenceTypeDownPaymentResponse.lift(
             uniffiRustCallWithError(Exception) { _status ->
                 UniffiLib.INSTANCE.uniffi_payment_plan_uniffi_fn_func_calculate_down_payment_plan(
@@ -1840,7 +1841,7 @@ fun `calculateDownPaymentPlan`(`params`: DownPaymentParams): List<DownPaymentRes
 }
 
 @Throws(Exception::class)
-fun `calculatePaymentPlan`(`params`: Params): List<Response> {
+internal fun `calculatePaymentPlan`(`params`: Params): List<Response> {
     return FfiConverterSequenceTypeResponse.lift(
             uniffiRustCallWithError(Exception) { _status ->
                 UniffiLib.INSTANCE.uniffi_payment_plan_uniffi_fn_func_calculate_payment_plan(
@@ -1851,7 +1852,7 @@ fun `calculatePaymentPlan`(`params`: Params): List<Response> {
     )
 }
 
-fun `disbursementDateRange`(
+internal fun `disbursementDateRange`(
         `baseDate`: java.time.Instant,
         `days`: kotlin.UInt
 ): List<java.time.Instant> {
@@ -1866,7 +1867,7 @@ fun `disbursementDateRange`(
     )
 }
 
-fun `getNonBusinessDaysBetween`(
+internal fun `getNonBusinessDaysBetween`(
         `startDate`: java.time.Instant,
         `endDate`: java.time.Instant
 ): List<java.time.Instant> {
@@ -1881,7 +1882,7 @@ fun `getNonBusinessDaysBetween`(
     )
 }
 
-fun `nextDisbursementDate`(`baseDate`: java.time.Instant): java.time.Instant {
+internal fun `nextDisbursementDate`(`baseDate`: java.time.Instant): java.time.Instant {
     return FfiConverterTimestamp.lift(
             uniffiRustCall() { _status ->
                 UniffiLib.INSTANCE.uniffi_payment_plan_uniffi_fn_func_next_disbursement_date(

@@ -3,23 +3,24 @@ package com.parceladolara.paymentplan
 // Import the generated uniffi bindings
 // Note: You need to ensure the generated Kotlin files are in the classpath
 // The uniffi-bindgen generates the files in sdks/kotlin/_internal/uniffi/payment_plan_uniffi/
+import com.parceladolara.paymentplan.payment_plan_uniffi.calculateDownPaymentPlan as internalCalculateDownPaymentPlan
+import com.parceladolara.paymentplan.payment_plan_uniffi.calculatePaymentPlan as internalCalculatePaymentPlan
+import com.parceladolara.paymentplan.payment_plan_uniffi.disbursementDateRange as internalDisbursementDateRange
+import com.parceladolara.paymentplan.payment_plan_uniffi.getNonBusinessDaysBetween as internalGetNonBusinessDaysBetween
+import com.parceladolara.paymentplan.payment_plan_uniffi.nextDisbursementDate as internalNextDisbursementDate
 import java.time.Instant
-import uniffi.payment_plan_uniffi.calculateDownPaymentPlan as internalCalculateDownPaymentPlan
-import uniffi.payment_plan_uniffi.calculatePaymentPlan as internalCalculatePaymentPlan
-import uniffi.payment_plan_uniffi.disbursementDateRange as internalDisbursementDateRange
-import uniffi.payment_plan_uniffi.getNonBusinessDaysBetween as internalGetNonBusinessDaysBetween
-import uniffi.payment_plan_uniffi.nextDisbursementDate as internalNextDisbursementDate
 
 /** Type aliases for better API exposure */
-typealias Invoice = uniffi.payment_plan_uniffi.Invoice
+typealias Invoice = com.parceladolara.paymentplan.payment_plan_uniffi.Invoice
 
-typealias Params = uniffi.payment_plan_uniffi.Params
+typealias Params = com.parceladolara.paymentplan.payment_plan_uniffi.Params
 
-typealias Response = uniffi.payment_plan_uniffi.Response
+typealias Response = com.parceladolara.paymentplan.payment_plan_uniffi.Response
 
-typealias DownPaymentParams = uniffi.payment_plan_uniffi.DownPaymentParams
+typealias DownPaymentParams = com.parceladolara.paymentplan.payment_plan_uniffi.DownPaymentParams
 
-typealias DownPaymentResponse = uniffi.payment_plan_uniffi.DownPaymentResponse
+typealias DownPaymentResponse =
+        com.parceladolara.paymentplan.payment_plan_uniffi.DownPaymentResponse
 
 /**
  * PaymentPlan SDK for Kotlin
