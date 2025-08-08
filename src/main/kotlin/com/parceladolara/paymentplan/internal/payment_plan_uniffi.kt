@@ -3,7 +3,7 @@
 
 @file:Suppress("NAME_SHADOWING")
 
-package com.parceladolara.paymentplan.payment_plan_uniffi
+package com.parceladolara.paymentplan.internal.payment_plan_uniffi
 
 // Common helper code.
 //
@@ -1353,7 +1353,7 @@ internal object FfiConverterTimestamp : FfiConverterRustBuffer<java.time.Instant
     }
 }
 
-data class DownPaymentParams(
+internal data class DownPaymentParams(
         var `params`: Params,
         var `requestedAmount`: kotlin.Double,
         var `minInstallmentAmount`: kotlin.Double,
@@ -1392,7 +1392,7 @@ internal object FfiConverterTypeDownPaymentParams : FfiConverterRustBuffer<DownP
     }
 }
 
-data class DownPaymentResponse(
+internal data class DownPaymentResponse(
         var `installmentAmount`: kotlin.Double,
         var `totalAmount`: kotlin.Double,
         var `installmentQuantity`: kotlin.UInt,
@@ -1431,7 +1431,7 @@ internal object FfiConverterTypeDownPaymentResponse : FfiConverterRustBuffer<Dow
     }
 }
 
-data class Invoice(
+internal data class Invoice(
         var `accumulatedDays`: kotlin.Long,
         var `factor`: kotlin.Double,
         var `accumulatedFactor`: kotlin.Double,
@@ -1466,7 +1466,7 @@ internal object FfiConverterTypeInvoice : FfiConverterRustBuffer<Invoice> {
     }
 }
 
-data class Params(
+internal data class Params(
         var `requestedAmount`: kotlin.Double,
         var `firstPaymentDate`: java.time.Instant,
         var `disbursementDate`: java.time.Instant,
@@ -1537,7 +1537,7 @@ internal object FfiConverterTypeParams : FfiConverterRustBuffer<Params> {
     }
 }
 
-data class Response(
+internal data class Response(
         var `installment`: kotlin.UInt,
         var `dueDate`: java.time.Instant,
         var `disbursementDate`: java.time.Instant,

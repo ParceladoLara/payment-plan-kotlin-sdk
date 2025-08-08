@@ -1,4 +1,4 @@
-package com.parceladolara.paymentplan
+package com.parceladolara.paymentplan.internal
 
 import java.io.File
 import java.io.FileOutputStream
