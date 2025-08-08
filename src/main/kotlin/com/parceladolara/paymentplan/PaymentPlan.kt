@@ -4,323 +4,12 @@ package com.parceladolara.paymentplan
 // Note: You need to ensure the generated Kotlin files are in the classpath
 // The uniffi-bindgen generates the files in sdks/kotlin/_internal/uniffi/payment_plan_uniffi/
 import com.parceladolara.paymentplan.internal.NativeLibraryLoader
-import com.parceladolara.paymentplan.internal.payment_plan_uniffi.calculateDownPaymentPlan as internalCalculateDownPaymentPlan
-import com.parceladolara.paymentplan.internal.payment_plan_uniffi.calculatePaymentPlan as internalCalculatePaymentPlan
-import com.parceladolara.paymentplan.internal.payment_plan_uniffi.disbursementDateRange as internalDisbursementDateRange
-import com.parceladolara.paymentplan.internal.payment_plan_uniffi.getNonBusinessDaysBetween as internalGetNonBusinessDaysBetween
-import com.parceladolara.paymentplan.internal.payment_plan_uniffi.nextDisbursementDate as internalNextDisbursementDate
+import com.parceladolara.paymentplan.internal.calculateDownPaymentPlan as internalCalculateDownPaymentPlan
+import com.parceladolara.paymentplan.internal.calculatePaymentPlan as internalCalculatePaymentPlan
+import com.parceladolara.paymentplan.internal.disbursementDateRange as internalDisbursementDateRange
+import com.parceladolara.paymentplan.internal.getNonBusinessDaysBetween as internalGetNonBusinessDaysBetween
+import com.parceladolara.paymentplan.internal.nextDisbursementDate as internalNextDisbursementDate
 import java.time.Instant
-
-/** Re-exported classes for public API */
-
-/** Represents an invoice with payment details and due date information. */
-data class Invoice(
-        val accumulatedDays: Long,
-        val factor: Double,
-        val accumulatedFactor: Double,
-        val dueDate: Instant
-) {
-    companion object {
-        internal fun fromInternal(
-                internal: com.parceladolara.paymentplan.internal.payment_plan_uniffi.Invoice
-        ): Invoice {
-            return Invoice(
-                    accumulatedDays = internal.accumulatedDays,
-                    factor = internal.factor,
-                    accumulatedFactor = internal.accumulatedFactor,
-                    dueDate = internal.dueDate
-            )
-        }
-    }
-
-    internal fun toInternal(): com.parceladolara.paymentplan.internal.payment_plan_uniffi.Invoice {
-        return com.parceladolara.paymentplan.internal.payment_plan_uniffi.Invoice(
-                accumulatedDays = this.accumulatedDays,
-                factor = this.factor,
-                accumulatedFactor = this.accumulatedFactor,
-                dueDate = this.dueDate
-        )
-    }
-}
-
-/** Parameters for calculating payment plans. */
-data class Params(
-        val requestedAmount: Double,
-        val firstPaymentDate: Instant,
-        val disbursementDate: Instant,
-        val installments: UInt,
-        val debitServicePercentage: UShort,
-        val mdr: Double,
-        val tacPercentage: Double,
-        val iofOverall: Double,
-        val iofPercentage: Double,
-        val interestRate: Double,
-        val minInstallmentAmount: Double,
-        val maxTotalAmount: Double,
-        val disbursementOnlyOnBusinessDays: Boolean
-) {
-    companion object {
-        internal fun fromInternal(
-                internal: com.parceladolara.paymentplan.internal.payment_plan_uniffi.Params
-        ): Params {
-            return Params(
-                    requestedAmount = internal.requestedAmount,
-                    firstPaymentDate = internal.firstPaymentDate,
-                    disbursementDate = internal.disbursementDate,
-                    installments = internal.installments,
-                    debitServicePercentage = internal.debitServicePercentage,
-                    mdr = internal.mdr,
-                    tacPercentage = internal.tacPercentage,
-                    iofOverall = internal.iofOverall,
-                    iofPercentage = internal.iofPercentage,
-                    interestRate = internal.interestRate,
-                    minInstallmentAmount = internal.minInstallmentAmount,
-                    maxTotalAmount = internal.maxTotalAmount,
-                    disbursementOnlyOnBusinessDays = internal.disbursementOnlyOnBusinessDays
-            )
-        }
-    }
-
-    internal fun toInternal(): com.parceladolara.paymentplan.internal.payment_plan_uniffi.Params {
-        return com.parceladolara.paymentplan.internal.payment_plan_uniffi.Params(
-                requestedAmount = this.requestedAmount,
-                firstPaymentDate = this.firstPaymentDate,
-                disbursementDate = this.disbursementDate,
-                installments = this.installments,
-                debitServicePercentage = this.debitServicePercentage,
-                mdr = this.mdr,
-                tacPercentage = this.tacPercentage,
-                iofOverall = this.iofOverall,
-                iofPercentage = this.iofPercentage,
-                interestRate = this.interestRate,
-                minInstallmentAmount = this.minInstallmentAmount,
-                maxTotalAmount = this.maxTotalAmount,
-                disbursementOnlyOnBusinessDays = this.disbursementOnlyOnBusinessDays
-        )
-    }
-}
-
-/** Represents a payment plan response with detailed calculation results. */
-data class Response(
-        val installment: UInt,
-        val dueDate: Instant,
-        val disbursementDate: Instant,
-        val accumulatedDays: Long,
-        val daysIndex: Double,
-        val accumulatedDaysIndex: Double,
-        val interestRate: Double,
-        val installmentAmount: Double,
-        val installmentAmountWithoutTac: Double,
-        val totalAmount: Double,
-        val debitService: Double,
-        val customerDebitServiceAmount: Double,
-        val customerAmount: Double,
-        val calculationBasisForEffectiveInterestRate: Double,
-        val merchantDebitServiceAmount: Double,
-        val merchantTotalAmount: Double,
-        val settledToMerchant: Double,
-        val mdrAmount: Double,
-        val effectiveInterestRate: Double,
-        val totalEffectiveCost: Double,
-        val eirYearly: Double,
-        val tecYearly: Double,
-        val eirMonthly: Double,
-        val tecMonthly: Double,
-        val totalIof: Double,
-        val contractAmount: Double,
-        val contractAmountWithoutTac: Double,
-        val tacAmount: Double,
-        val iofPercentage: Double,
-        val overallIof: Double,
-        val preDisbursementAmount: Double,
-        val paidTotalIof: Double,
-        val paidContractAmount: Double,
-        val invoices: List<Invoice>
-) {
-    companion object {
-        internal fun fromInternal(
-                internal: com.parceladolara.paymentplan.internal.payment_plan_uniffi.Response
-        ): Response {
-            return Response(
-                    installment = internal.installment,
-                    dueDate = internal.dueDate,
-                    disbursementDate = internal.disbursementDate,
-                    accumulatedDays = internal.accumulatedDays,
-                    daysIndex = internal.daysIndex,
-                    accumulatedDaysIndex = internal.accumulatedDaysIndex,
-                    interestRate = internal.interestRate,
-                    installmentAmount = internal.installmentAmount,
-                    installmentAmountWithoutTac = internal.installmentAmountWithoutTac,
-                    totalAmount = internal.totalAmount,
-                    debitService = internal.debitService,
-                    customerDebitServiceAmount = internal.customerDebitServiceAmount,
-                    customerAmount = internal.customerAmount,
-                    calculationBasisForEffectiveInterestRate =
-                            internal.calculationBasisForEffectiveInterestRate,
-                    merchantDebitServiceAmount = internal.merchantDebitServiceAmount,
-                    merchantTotalAmount = internal.merchantTotalAmount,
-                    settledToMerchant = internal.settledToMerchant,
-                    mdrAmount = internal.mdrAmount,
-                    effectiveInterestRate = internal.effectiveInterestRate,
-                    totalEffectiveCost = internal.totalEffectiveCost,
-                    eirYearly = internal.eirYearly,
-                    tecYearly = internal.tecYearly,
-                    eirMonthly = internal.eirMonthly,
-                    tecMonthly = internal.tecMonthly,
-                    totalIof = internal.totalIof,
-                    contractAmount = internal.contractAmount,
-                    contractAmountWithoutTac = internal.contractAmountWithoutTac,
-                    tacAmount = internal.tacAmount,
-                    iofPercentage = internal.iofPercentage,
-                    overallIof = internal.overallIof,
-                    preDisbursementAmount = internal.preDisbursementAmount,
-                    paidTotalIof = internal.paidTotalIof,
-                    paidContractAmount = internal.paidContractAmount,
-                    invoices = internal.invoices.map { Invoice.fromInternal(it) }
-            )
-        }
-    }
-
-    internal fun toInternal(): com.parceladolara.paymentplan.internal.payment_plan_uniffi.Response {
-        return com.parceladolara.paymentplan.internal.payment_plan_uniffi.Response(
-                installment = this.installment,
-                dueDate = this.dueDate,
-                disbursementDate = this.disbursementDate,
-                accumulatedDays = this.accumulatedDays,
-                daysIndex = this.daysIndex,
-                accumulatedDaysIndex = this.accumulatedDaysIndex,
-                interestRate = this.interestRate,
-                installmentAmount = this.installmentAmount,
-                installmentAmountWithoutTac = this.installmentAmountWithoutTac,
-                totalAmount = this.totalAmount,
-                debitService = this.debitService,
-                customerDebitServiceAmount = this.customerDebitServiceAmount,
-                customerAmount = this.customerAmount,
-                calculationBasisForEffectiveInterestRate =
-                        this.calculationBasisForEffectiveInterestRate,
-                merchantDebitServiceAmount = this.merchantDebitServiceAmount,
-                merchantTotalAmount = this.merchantTotalAmount,
-                settledToMerchant = this.settledToMerchant,
-                mdrAmount = this.mdrAmount,
-                effectiveInterestRate = this.effectiveInterestRate,
-                totalEffectiveCost = this.totalEffectiveCost,
-                eirYearly = this.eirYearly,
-                tecYearly = this.tecYearly,
-                eirMonthly = this.eirMonthly,
-                tecMonthly = this.tecMonthly,
-                totalIof = this.totalIof,
-                contractAmount = this.contractAmount,
-                contractAmountWithoutTac = this.contractAmountWithoutTac,
-                tacAmount = this.tacAmount,
-                iofPercentage = this.iofPercentage,
-                overallIof = this.overallIof,
-                preDisbursementAmount = this.preDisbursementAmount,
-                paidTotalIof = this.paidTotalIof,
-                paidContractAmount = this.paidContractAmount,
-                invoices = this.invoices.map { it.toInternal() }
-        )
-    }
-}
-
-/** Parameters for calculating down payment plans. */
-data class DownPaymentParams(
-        val params: Params,
-        val requestedAmount: Double,
-        val minInstallmentAmount: Double,
-        val firstPaymentDate: Instant,
-        val installments: UInt
-) {
-    companion object {
-        internal fun fromInternal(
-                internal:
-                        com.parceladolara.paymentplan.internal.payment_plan_uniffi.DownPaymentParams
-        ): DownPaymentParams {
-            return DownPaymentParams(
-                    params = Params.fromInternal(internal.params),
-                    requestedAmount = internal.requestedAmount,
-                    minInstallmentAmount = internal.minInstallmentAmount,
-                    firstPaymentDate = internal.firstPaymentDate,
-                    installments = internal.installments
-            )
-        }
-    }
-
-    internal fun toInternal():
-            com.parceladolara.paymentplan.internal.payment_plan_uniffi.DownPaymentParams {
-        return com.parceladolara.paymentplan.internal.payment_plan_uniffi.DownPaymentParams(
-                params = this.params.toInternal(),
-                requestedAmount = this.requestedAmount,
-                minInstallmentAmount = this.minInstallmentAmount,
-                firstPaymentDate = this.firstPaymentDate,
-                installments = this.installments
-        )
-    }
-}
-
-/** Response for down payment plan calculations. */
-data class DownPaymentResponse(
-        val installmentAmount: Double,
-        val totalAmount: Double,
-        val installmentQuantity: UInt,
-        val firstPaymentDate: Instant,
-        val plans: List<Response>
-) {
-    companion object {
-        internal fun fromInternal(
-                internal:
-                        com.parceladolara.paymentplan.internal.payment_plan_uniffi.DownPaymentResponse
-        ): DownPaymentResponse {
-            return DownPaymentResponse(
-                    installmentAmount = internal.installmentAmount,
-                    totalAmount = internal.totalAmount,
-                    installmentQuantity = internal.installmentQuantity,
-                    firstPaymentDate = internal.firstPaymentDate,
-                    plans = internal.plans.map { Response.fromInternal(it) }
-            )
-        }
-    }
-
-    internal fun toInternal():
-            com.parceladolara.paymentplan.internal.payment_plan_uniffi.DownPaymentResponse {
-        return com.parceladolara.paymentplan.internal.payment_plan_uniffi.DownPaymentResponse(
-                installmentAmount = this.installmentAmount,
-                totalAmount = this.totalAmount,
-                installmentQuantity = this.installmentQuantity,
-                firstPaymentDate = this.firstPaymentDate,
-                plans = this.plans.map { it.toInternal() }
-        )
-    }
-}
-
-/** Exceptions that can be thrown by the payment plan calculations. */
-sealed class PaymentPlanException : Exception() {
-
-    /** Thrown when invalid parameters are provided to the calculation functions. */
-    class InvalidParams(message: String = "Invalid parameters provided") : PaymentPlanException() {
-        override val message: String = message
-    }
-
-    /** Thrown when an error occurs during payment plan calculation. */
-    class CalculationException(message: String = "Error occurred during calculation") :
-            PaymentPlanException() {
-        override val message: String = message
-    }
-
-    companion object {
-        internal fun fromInternal(
-                internal: com.parceladolara.paymentplan.internal.payment_plan_uniffi.Exception
-        ): PaymentPlanException {
-            return when (internal) {
-                is com.parceladolara.paymentplan.internal.payment_plan_uniffi.Exception.InvalidParams ->
-                        InvalidParams(internal.message.ifEmpty { "Invalid parameters provided" })
-                is com.parceladolara.paymentplan.internal.payment_plan_uniffi.Exception.CalculationException ->
-                        CalculationException(
-                                internal.message.ifEmpty { "Error occurred during calculation" }
-                        )
-            }
-        }
-    }
-}
 
 /**
  * PaymentPlan SDK for Kotlin
@@ -331,7 +20,6 @@ sealed class PaymentPlanException : Exception() {
 object PaymentPlan {
 
     init {
-
         // Load the native library when the object is first accessed
         try {
             NativeLibraryLoader.loadLibrary()
@@ -353,7 +41,7 @@ object PaymentPlan {
         return try {
             val internalResult = internalCalculatePaymentPlan(params.toInternal())
             internalResult.map { Response.fromInternal(it) }
-        } catch (e: com.parceladolara.paymentplan.internal.payment_plan_uniffi.Exception) {
+        } catch (e: com.parceladolara.paymentplan.internal.Exception) {
             throw PaymentPlanException.fromInternal(e)
         }
     }
@@ -371,7 +59,7 @@ object PaymentPlan {
         return try {
             val internalResult = internalCalculateDownPaymentPlan(params.toInternal())
             internalResult.map { DownPaymentResponse.fromInternal(it) }
-        } catch (e: com.parceladolara.paymentplan.internal.payment_plan_uniffi.Exception) {
+        } catch (e: com.parceladolara.paymentplan.internal.Exception) {
             throw PaymentPlanException.fromInternal(e)
         }
     }
