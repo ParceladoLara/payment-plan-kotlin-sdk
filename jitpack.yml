@@ -4,5 +4,5 @@ before_install:
   - echo "Setting up JitPack build environment"
   - export GRADLE_OPTS="-Dorg.gradle.daemon=false -Dorg.gradle.parallel=false"
 install:
-  - echo "Installing dependencies"
-  - ./gradlew build -x test --no-daemon --stacktrace
+  - echo "Installing dependencies and publishing artifacts"
+  - ./gradlew build publishToMavenLocal -x test --no-daemon --stacktrace
