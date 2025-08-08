@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.parceladolara"
-version = "v3.1.1"
+version = "v3.1.2"
 
 repositories {
     mavenCentral()
@@ -24,7 +24,7 @@ kotlin {
 
 dependencies {
     implementation("net.java.dev.jna:jna:5.13.0")
-
+    
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
 }
@@ -33,16 +33,16 @@ tasks.test {
     useJUnitPlatform()
     // Skip tests by default since they require the native library
     onlyIf { project.hasProperty("runTests") }
-
+    
     // The NativeLibraryLoader will handle loading libraries from JAR resources or fallback paths
-
+    
     // Show test output
     testLogging {
         events("passed", "skipped", "failed", "standardOut", "standardError")
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
         showStandardStreams = false
     }
-
+    
     doFirst {
         // Check if we're in development environment with direct library access
         val devNativeLibPath = file("../../target/release-unstripped/libpayment_plan_uniffi.so")
@@ -74,7 +74,7 @@ kotlin {
 // Task to generate or check uniffi bindings
 tasks.register("generateUniffiBindings") {
     description = "Check uniffi bindings for Kotlin"
-
+    
     doLast {
         val bindingsFile = file("_internal/uniffi/payment_plan_uniffi/payment_plan_uniffi.kt")
         if (!bindingsFile.exists()) {
@@ -99,7 +99,7 @@ tasks.register<JavaExec>("runExample") {
     description = "Run the PaymentPlan example"
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("com.parceladolara.paymentplan.examples.PaymentPlanExample")
-
+    
     doFirst {
         // Check if we're in development environment with direct library access
         val devNativeLibPath = file("../../target/release-unstripped/libpayment_plan_uniffi.so")
@@ -118,14 +118,14 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
-
+            
             artifactId = "payment-plan-kotlin-sdk"
-
+            
             pom {
                 name.set("Payment Plan Kotlin SDK")
                 description.set("Kotlin SDK for payment plan calculations")
                 url.set("https://github.com/ParceladoLara/payment-plan-kotlin-sdk")
-
+                
                 developers {
                     developer {
                         id.set("parceladolara")
