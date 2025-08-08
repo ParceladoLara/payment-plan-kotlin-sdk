@@ -67,7 +67,7 @@ tasks.register("generateUniffiBindings") {
     description = "Check uniffi bindings for Kotlin"
 
     doLast {
-        val bindingsFile = file("_internal/uniffi/payment_plan_uniffi/payment_plan_uniffi.kt")
+        val bindingsFile = file("src/main/kotlin/com/parceladolara/paymentplan/internal/payment_plan_uniffi.kt")
         if (!bindingsFile.exists()) {
             throw GradleException(
                 "UniFFI bindings not found.\n" +
