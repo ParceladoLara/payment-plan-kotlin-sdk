@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.parceladolara"
-version = "v3.1.2"
+version = "v3.1.8"
 
 repositories {
     mavenCentral()
@@ -17,7 +17,7 @@ repositories {
 kotlin {
     sourceSets {
         main {
-            kotlin.srcDirs("src/main/kotlin", "_internal")
+            kotlin.srcDirs("src/main/kotlin")
         }
     }
 }
