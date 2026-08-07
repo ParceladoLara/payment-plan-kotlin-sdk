@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.parceladolara"
-version = "v3.2.2"
+version = "v3.2.3"
 
 repositories {
     mavenCentral()
